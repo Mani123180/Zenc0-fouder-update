@@ -1113,6 +1113,12 @@ img {
         grid-template-columns: minmax(0, 1fr);
         gap: 20px;
       }
+      .mobile-menu-btn {
+        display: block !important;
+      }
+      .sidebar-close-btn {
+        display: block !important;
+      }
       .portal-sidebar {
         position: fixed;
         top: 0;
@@ -1124,7 +1130,7 @@ img {
         background: var(--color-bg-white);
         box-shadow: var(--shadow-lg);
         transition: left 0.3s ease;
-        padding: 90px 20px 20px 20px;
+        padding: 60px 20px 20px 20px;
         border-radius: 0;
         display: flex;
         flex-direction: column;
@@ -1148,6 +1154,7 @@ img {
         flex-wrap: nowrap;
         justify-content: flex-start;
         gap: 8px;
+        overflow-x: hidden;
       }
       .menu-item {
         width: 100% !important;
@@ -1157,9 +1164,11 @@ img {
         border-radius: var(--radius-sm);
         gap: 12px;
         text-align: left;
+        justify-content: flex-start;
       }
       .menu-item.active {
         border-left: 4px solid var(--color-secondary) !important;
+        border-bottom: none !important;
         background: rgba(30, 58, 138, 0.06) !important;
         color: var(--color-primary) !important;
         padding-left: 12px !important;
@@ -2424,4 +2433,101 @@ img {
   text-align: center;
 }
 
+/* --- Mobile Responsive Portal Styles --- */
+@media (max-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .portal-layout {
+    flex-direction: column;
+  }
   
+  .portal-sidebar {
+    /* Removed custom mobile override to let max-width 900px handle it */
+  }
+  
+  .sidebar-logo {
+    margin-bottom: 0;
+  }
+  
+  .portal-main {
+    padding: 15px;
+    height: auto;
+    overflow-y: visible;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .sa-schools-table th, .sa-schools-table td {
+    padding: 12px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .sa-schools-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .sa-filter-segment {
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .sa-toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .sa-search-wrap input {
+    width: 100%;
+  }
+  
+  .modal-content {
+    width: 95%;
+    max-width: 100%;
+    margin: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .sa-actions-cell {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+  
+  .sa-tbl-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  
+  .portal-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

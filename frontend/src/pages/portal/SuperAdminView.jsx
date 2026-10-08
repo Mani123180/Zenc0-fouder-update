@@ -3,7 +3,9 @@ import { api } from '../../services/api';
 import { getPortalData, savePortalData } from '../../services/portalData';
 import NewSchoolWizardModal from './NewSchoolWizardModal';
 import SubscriptionModal from './SubscriptionModal';
+import SchoolAdminView from './SchoolAdminView';
 import {
+
   CampusOverviewModal,
   EditSchoolModal,
   AdminProfileModal,
@@ -122,14 +124,10 @@ const defaultUsers = [
 ];
 
 const defaultServices = [
-  { id: 'SRV-01', name: 'Student Management', category: 'Academic', status: 'Active', cost: '₹2,500/mo', description: 'Student admission, roll list, profiles & gradebook tracking.' },
-  { id: 'SRV-02', name: 'Teacher Management', category: 'Staff', status: 'Active', cost: '₹2,000/mo', description: 'Staff directory, subject allocations and teaching schedules.' },
-  { id: 'SRV-03', name: 'Attendance & SMS Alerts', category: 'Communication', status: 'Available', cost: '₹2,500/mo', description: 'Real-time daily attendance tracking with automated parent SMS notifications.' },
-  { id: 'SRV-04', name: 'Online Fee Payment Gateway', category: 'Finance', status: 'Active', cost: '₹5,000/mo', description: 'Integrated UPI, Netbanking and Cards payment processing for school dues.' },
-  { id: 'SRV-05', name: 'Digital Library & E-Books', category: 'Academic', status: 'Available', cost: '₹3,500/mo', description: 'Central repository of e-books, study materials and digital syllabus.' },
-  { id: 'SRV-06', name: 'GPS Bus Tracking System', category: 'Transport', status: 'Active', cost: '₹4,000/mo', description: 'Live school bus location monitoring for parent security.' },
-  { id: 'SRV-07', name: 'Homework & Assignments', category: 'Academic', status: 'Active', cost: '₹2,000/mo', description: 'Online homework publishing, student submission and evaluation.' },
-  { id: 'SRV-08', name: 'Secure Communication', category: 'Communication', status: 'Active', cost: '₹1,500/mo', description: 'Direct messaging between teachers, parents, and administrative desk.' },
+  { id: 'SRV-01', name: 'Manage Principal', category: 'Staff', status: 'Active', cost: 'Included', description: 'Dashboard, tools and permissions for the School Principal.' },
+  { id: 'SRV-02', name: 'Manage Teacher', category: 'Staff', status: 'Active', cost: 'Included', description: 'Tools for teachers to manage classes, attendance, and students.' },
+  { id: 'SRV-03', name: 'Manage Student', category: 'Academic', status: 'Active', cost: 'Included', description: 'Student portals, profiles, academic performance and tracking.' },
+  { id: 'SRV-04', name: 'Manage Parent', category: 'Communication', status: 'Active', cost: 'Included', description: 'Parent portals for tracking attendance, grades, and fees.' },
 ];
 
 const defaultPlans = [
@@ -228,6 +226,7 @@ export default function SuperAdminView({ activeTab = 'sa-dashboard' }) {
   const [subStatusFilter, setSubStatusFilter] = useState('All');
   const [billFilter, setBillFilter] = useState('All');
   const [settingsSection, setSettingsSection] = useState('platform');
+  const [saServicesTab, setSaServicesTab] = useState('school-admin-users');
 
   // Modals States
   const [isWizardOpen, setIsWizardOpen] = useState(false);
@@ -1206,71 +1205,18 @@ export default function SuperAdminView({ activeTab = 'sa-dashboard' }) {
       {activeTab === 'sa-services' && (
         <div>
           <div className="content-header">
-            <h2 id="section-title">Platform Services</h2>
-            <div id="section-actions"></div>
+            <h2 id="section-title">School Admin Services</h2>
           </div>
-
-          <div id="portal-content">
-            <div className="sa-schools-header-bar">
-              <div className="sa-filter-segment">
-                <button
-                  className={`sa-filter-tab ${serviceFilter === 'All' ? 'active' : ''}`}
-                  onClick={() => setServiceFilter('All')}
-                >
-                  Available Services <span className="sa-tab-badge">{services.length}</span>
-                </button>
-                <button
-                  className={`sa-filter-tab ${serviceFilter === 'Active' ? 'active' : ''}`}
-                  onClick={() => setServiceFilter('Active')}
-                >
-                  Active Services
-                </button>
-                <button
-                  className={`sa-filter-tab ${serviceFilter === 'Inactive' ? 'active' : ''}`}
-                  onClick={() => setServiceFilter('Inactive')}
-                >
-                  Inactive
-                </button>
-              </div>
-              <div className="sa-toolbar-right">
-                <button className="btn btn-outline btn-sm" onClick={() => showFeedback('Assign Service', 'Select school campus to assign service module.')}>
-                  Assign Service to School
-                </button>
-                <button className="btn btn-primary btn-sm" onClick={() => showFeedback('Create Service', 'Service definition module active.')}>
-                  + Create Service
-                </button>
-              </div>
-            </div>
-
-            <div className="grid-2">
-              {filteredServices.map((srv) => (
-                <div key={srv.id} className="portal-card sa-service-card" data-status={srv.status}>
-                  <div className="portal-card-header">
-                    <span className="portal-card-title">{srv.name}</span>
-                    <span className="badge badge-info">{srv.category}</span>
-                  </div>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--color-text-dark)', margin: '8px 0' }}>{srv.description}</p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                    <span style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1.1rem' }}>{srv.cost}</span>
-                    <span className={`badge ${srv.status === 'Active' ? 'badge-success' : 'badge-warning'}`}>{srv.status}</span>
-                  </div>
-                  <div className="sa-actions-cell" style={{ marginTop: '14px' }}>
-                    <button className="sa-tbl-action edit" onClick={() => showFeedback('Edit Service', `Editing service ${srv.name}.`)}>
-                      Edit Service
-                    </button>
-                    <button
-                      className={`sa-tbl-action ${srv.status === 'Active' ? 'danger' : 'success'}`}
-                      onClick={() => handleToggleService(srv.id)}
-                    >
-                      {srv.status === 'Active' ? 'Deactivate' : 'Activate'}
-                    </button>
-                    <button className="sa-tbl-action admin" onClick={() => showFeedback('Assign Service', `Assigning ${srv.name} to school campus.`)}>
-                      Assign to School
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div style={{ padding: '0 25px 20px', display: 'flex', gap: '10px', flexWrap: 'wrap', borderBottom: '1px solid #e2e8f0', marginBottom: '20px' }}>
+             <button className={`btn btn-sm ${saServicesTab === 'school-admin-users' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('school-admin-users')}>All Users</button>
+             <button className={`btn btn-sm ${saServicesTab === 'manage-principal' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('manage-principal')}>Manage Principal</button>
+             <button className={`btn btn-sm ${saServicesTab === 'manage-teachers' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('manage-teachers')}>Manage Teachers</button>
+             <button className={`btn btn-sm ${saServicesTab === 'manage-students' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('manage-students')}>Manage Students</button>
+             <button className={`btn btn-sm ${saServicesTab === 'manage-parents' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('manage-parents')}>Manage Parents</button>
+             <button className={`btn btn-sm ${saServicesTab === 'manage-classes' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSaServicesTab('manage-classes')}>Classes</button>
+          </div>
+          <div>
+             <SchoolAdminView activeTab={saServicesTab} />
           </div>
         </div>
       )}
