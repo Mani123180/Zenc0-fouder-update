@@ -163,7 +163,6 @@ export default function Portal() {
             <img src="/images/emblem.png" alt="ZenSchool Emblem" style={{ height: '48px', width: 'auto', borderRadius: 0 }} />
             <div className="logo-text">
               ZenSchool Platform
-              <span className="logo-sub" id="header-school-name">Multi-School Management</span>
             </div>
           </Link>
           <button 
