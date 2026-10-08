@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenSchool Platform Login | Multi-School Portal</title>
+  <meta name="description" content="Access ZenSchool Platform portal. Super Admin and School-level portal access.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-wrapper {
+      min-height: calc(100vh - 250px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 24px;
+      background: radial-gradient(circle at top right, rgba(30, 58, 138, 0.05), transparent), var(--color-bg-light);
+    }
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--color-bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(30, 58, 138, 0.08);
+      overflow: hidden;
+    }
+    .login-header {
+      background: var(--color-primary);
+      padding: 30px 24px;
+      text-align: center;
+      color: var(--color-bg-white);
+      position: relative;
+    }
+    .login-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--color-secondary);
+    }
+    .login-logo-img {
+      height: 52px;
+      width: auto;
+      margin: 0 auto 12px auto;
+      background: var(--color-bg-white);
+      padding: 6px;
+      border-radius: 50%;
+    }
+    .login-header h2 {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      margin-bottom: 5px;
+    }
+    .login-header p {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .login-body {
+      padding: 24px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: var(--color-primary);
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(30, 58, 138, 0.15);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--color-text-dark);
+      transition: var(--transition-fast);
+      background-color: var(--color-bg-light);
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      background-color: var(--color-bg-white);
+    }
+    .role-quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+    .role-btn {
+      background: var(--color-bg-light);
+      border: 1px solid rgba(30, 58, 138, 0.12);
+      color: var(--color-primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .role-btn:hover, .role-btn.active {
+      background: var(--color-primary);
+      color: var(--color-bg-white);
+      border-color: var(--color-primary);
+    }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .error-msg {
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="login-header">
+        <img src="images/emblem.png" alt="ZenSchool Emblem" class="login-logo-img">
+        <h2>ZenSchool Platform Portal</h2>
+        <p>Select role or enter credentials to sign in</p>
+      </div>
+      <div class="login-body">
+        <div class="error-msg" id="login-error">Invalid username/email or password.</div>
+
+        <div class="demo-login-box" style="background: rgba(30, 58, 138, 0.04); border: 1px dashed rgba(30, 58, 138, 0.2); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 20px; text-align: center;">
+          <p style="font-size: 0.82rem; font-weight: 600; color: var(--color-primary); margin-bottom: 8px;">Quick Demo Login Presets:</p>
+          <div class="role-quick-links">
+            <button type="button" class="role-btn" onclick="fillDemo('superadmin')">Super Admin</button>
+            <button type="button" class="role-btn" onclick="fillDemo('schooladmin_ssv')">School Admin</button>
+            <button type="button" class="role-btn" onclick="fillDemo('principal')">Principal</button>
+            <button type="button" class="role-btn" onclick="fillDemo('teacher')">Teacher</button>
+            <button type="button" class="role-btn" onclick="fillDemo('student')">Student</button>
+            <button type="button" class="role-btn" onclick="fillDemo('parent')">Parent</button>
+          </div>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Email / Username</label>
+            <input type="text" id="username" class="form-control" placeholder="e.g. superadmin@zenschool.com" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+          </div>
+          <button type="submit" class="btn btn-primary login-btn">Log In to Portal</button>
+          <a href="index.html" class="btn btn-outline" style="width: 100%; display: block; text-align: center; margin-top: 15px; text-decoration: none; padding: 14px; border-radius: 50px; font-size: 1rem; box-sizing: border-box;">Go Back to Home</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    const defaultCredentials = {
+      superadmin: { user: 'superadmin@zenschool.com', pass: 'SuperAdmin@123', role: 'SUPER_ADMIN', name: 'ZenSchool Super Admin', schoolId: null, schoolName: 'Platform Central' },
+      schooladmin_ssv: { user: 'admin@ssvschool.com', pass: 'admin123', role: 'SCHOOL_ADMIN', name: 'School Administrator (SSV)', schoolId: 'SCHOOL002', schoolName: 'Sri Sankara Vidhyasala Girls High School' },
+      principal: { user: 'principal@ssvschool.com', pass: 'principal123', role: 'PRINCIPAL', name: 'Dr. Savithri Raman', schoolId: 'SCHOOL002', schoolName: 'Sri Sankara Vidhyasala Girls High School' },
+      teacher: { user: 'teacher@ssvschool.com', pass: 'teacher123', role: 'TEACHER', name: 'Mrs. Priya Krishnan', schoolId: 'SCHOOL002', schoolName: 'Sri Sankara Vidhyasala Girls High School' },
+      student: { user: 'student@ssvschool.com', pass: 'student123', role: 'STUDENT', name: 'Aishwarya Kumar', schoolId: 'SCHOOL002', schoolName: 'Sri Sankara Vidhyasala Girls High School' },
+      parent: { user: 'parent@ssvschool.com', pass: 'parent123', role: 'PARENT', name: 'Ramesh Kumar', schoolId: 'SCHOOL002', schoolName: 'Sri Sankara Vidhyasala Girls High School' }
+    };
+
+    function fillDemo(key) {
+      if (defaultCredentials[key]) {
+        document.getElementById('username').value = defaultCredentials[key].user;
+        document.getElementById('password').value = defaultCredentials[key].pass;
+        document.getElementById('login-form').dispatchEvent(new Event('submit'));
+      }
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const inputUser = document.getElementById('username').value.trim().toLowerCase();
+      const inputPass = document.getElementById('password').value;
+      const errorMsg = document.getElementById('login-error');
+
+      let foundUser = null;
+
+      // 1. Check default credentials
+      for (const cred of Object.values(defaultCredentials)) {
+        if ((cred.user.toLowerCase() === inputUser || cred.user.split('@')[0].toLowerCase() === inputUser) && cred.pass === inputPass) {
+          foundUser = cred;
+          break;
+        }
+      }
+
+      // 2. Check dynamic users in localStorage if created via Super Admin or School Admin
+      if (!foundUser) {
+        try {
+          const demoData = JSON.parse(localStorage.getItem('ssv_demo_data')) || {};
+          const usersList = demoData.users || [];
+          const userMatch = usersList.find(u => (u.email?.toLowerCase() === inputUser || u.username?.toLowerCase() === inputUser) && u.password === inputPass);
+          if (userMatch) {
+            foundUser = {
+              user: userMatch.email || userMatch.username,
+              pass: userMatch.password,
+              role: userMatch.role,
+              name: userMatch.name,
+              schoolId: userMatch.schoolId || null,
+              schoolName: userMatch.schoolName || 'School'
+            };
+          }
+        } catch (err) {
+          console.error('LocalStorage user read error', err);
+        }
+      }
+
+      if (foundUser) {
+        errorMsg.style.display = 'none';
+        localStorage.setItem('ssv_portal_user', JSON.stringify({
+          role: foundUser.role,
+          username: foundUser.user,
+          name: foundUser.name,
+          schoolId: foundUser.schoolId,
+          schoolName: foundUser.schoolName
+        }));
+        window.location.href = 'portal.html';
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
