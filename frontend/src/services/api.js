@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://zenc0-fouder-update-1.onrender.com/api' : '/api');
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
